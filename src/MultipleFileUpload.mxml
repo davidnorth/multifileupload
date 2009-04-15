@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application paddingTop="0" paddingBottom="0" paddingLeft="0" paddingRight="0"
+xmlns:mx="http://www.adobe.com/2006/mxml"
+ frameRate="60" creationComplete="init()"
+ 
+ >
+    <mx:states>
+        <mx:State name="filesSelected">
+            <mx:SetProperty target="{uploadButton}" name="enabled" value="true"/>
+        </mx:State>
+        <mx:State name="filesUploading">
+            <mx:SetProperty target="{button1}" name="enabled" value="false"/>
+        </mx:State>
+        <mx:State name="uploadsComplete" basedOn="filesUploading">
+            <mx:RemoveChild target="{button1}"/>
+            <mx:RemoveChild target="{uploadButton}"/>
+            <!--<mx:AddChild relativeTo="{hbox1}" position="lastChild">
+                <mx:LinkButton label="All done! Click to edit names, descriptions and tags" color="#4698CB" textDecoration="underline" click="goToCompleteURL()" id="linkbutton1"/>
+            </mx:AddChild>-->
+            <mx:RemoveChild target="{uploadProgress}"/>
+        </mx:State>
+    </mx:states>
+    
+    <mx:Style source="style.css"/>
+
+    <mx:Script source="uk/co/singlemind/array_extensions.as"/>
+    <mx:Script source="app.as" />
+    
+    <mx:VBox width="100%">
+        <mx:DataGrid id="fileListDataGrid" width="100%" height="290" dataProvider="{fileRefList.pendingFiles}" allowMultipleSelection="true">
+             <mx:columns>
+                <mx:DataGridColumn dataField="name" headerText="Filename"/>
+                <mx:DataGridColumn dataField="formattedSize" headerText="Size"/>    
+                <mx:DataGridColumn dataField="status" headerText="Progress" />  
+            </mx:columns>
+        </mx:DataGrid>
+        <mx:HBox width="100%" horizontalAlign="right" id="hbox1">
+            <mx:Button label="Add Files" click="browse()"  id="button1"/>
+            <mx:Button label="Upload" id="uploadButton" click="upload()"  enabled="false"/>
+            <mx:ProgressBar label="Progress" id="uploadProgress" mode="manual" indeterminate="false" />
+        </mx:HBox>
+    </mx:VBox>
+
+</mx:Application>
